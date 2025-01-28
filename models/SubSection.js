@@ -1,10 +1,13 @@
 const mongoose=require("mongoose")
 const subSectionSchema=mongoose.Schema({
     title:{
-        type:String,
+        type:String
     },
+    
     timeDuration:{
         type:String
+    },title:{
+        type:String,
     },
     description:{
         type:String

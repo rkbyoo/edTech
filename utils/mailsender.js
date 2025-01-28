@@ -21,3 +21,4 @@ const maileSender=async(email,title,body)=>{
         console.log("some error while sending the mail",error.message)
     }
 }
+module.exports=maileSender

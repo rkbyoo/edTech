@@ -30,10 +30,10 @@ const courseSchema=mongoose.Schema({
     ,thumbnail:{
         type:String
     },
-    tag:{
+    tag:[{
         type:mongoose.Schema.Types.objectId,
         ref:"Tag"
-    },
+    }],
     studentEnrolled:[{
         type:mongoose.Schema.Types.objectId
         ,required:true,

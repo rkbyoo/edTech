@@ -1,11 +1,12 @@
 const nodemailer=require("nodemailer")
+require("dotenv").config()
 const maileSender=async(email,title,body)=>{
     try {
         let transporter=nodemailer.createTransport({
             host:process.env.USER_MAIL,
             auth:{
                 user:process.env.MAIL_USER,
-                PASS:process.env.MAIL_PASS,
+                pass:process.env.MAIL_PASS,
             }
         })
 

@@ -1,3 +1,3 @@
-//reset password token
+//reset password token ,send the link to reset email ps
 
-//reset password
+//reset password to change in db

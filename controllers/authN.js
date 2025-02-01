@@ -1,8 +1,9 @@
 const User=require("../models/User")
 const OTP=require("../models/OTP")
 const otpGenerator=require("otp-generator")
+const bcrypt=require("bcrypt")
 
-//otp send
+//otp generation and sending
 exports.sendOTP=async(req,res)=>{
     try {
         const {email}=req.body
@@ -52,7 +53,46 @@ exports.sendOTP=async(req,res)=>{
 
 
 //singup
+exports.signUp=async(req,res)=>{
+    const {email,firstName,lastName,phoneNumber,password,confirmPassword,otp,accountType}=req.body
+    //necessary parameter validation
+    if(!email || !firstName || !lastName || !password || !confirmPassword || !otp )
+    {
+        return res.status(403).json({
+            success:false,
+            message:"all fields are not present"
+        })
+    }
+    //passowrd validation
+    if(password!==confirmPassword){
+        return res.status(401).json({
+            success:false,
+            message:"password didnt matched"
+        })
+    }
+    //user validation
+    const userExist=await User.findOne({email})
+    if(userExist){
+        return res.status(400).json({
+            success:false,
+            message:"user already exists"
+        })
+    } 
+    //
 
+
+
+
+
+
+
+    //hash passwords
+    const hashedPassword=bcrypt.hash(10,password)
+
+    //saving the user in DB
+    const response=await User.create({email})
+
+}
 
 //login 
 

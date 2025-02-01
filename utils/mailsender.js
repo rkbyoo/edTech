@@ -11,7 +11,7 @@ const maileSender=async(email,title,body)=>{
         })
 
         let info=await transporter.sendMail({
-            from:'Notion | codehelp'
+            from:'edTech community'
             ,to:`${email}`
             ,subject:`${title}`
             ,html:`${body}`

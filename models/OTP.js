@@ -22,15 +22,15 @@ const OTPschema=new mongoose.Schema({
 async function sendVerificationEmail(email,otp) {
     try {
         const mailResponse=await maileSender(email,"verification email",otp)
-        console.log("email sent successfully",mailResponse)
+        console.log("verification email sent successfully",mailResponse)
     } catch (error) {
-        console.log("some error occured while sending mail",error)
+        console.log("some error occured while sending verification mail",error)
     }
 }
 
 
 //using pre middleware
-//this is ref to current object data
+//this is reff to current object data that is OTPschema 
 OTPschema.pre("save",async function (next) {
     await sendVerificationEmail(this.email,this.otp)
     next()

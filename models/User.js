@@ -30,7 +30,11 @@ const userSchema=mongoose.Schema({
     ,courseProgress:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"CourseProgress"
-    }]
+    }],
+    contactNumber:{
+        type:Number,
+        required:false
+    }
 })
 
 module.exports=mongoose.model("User",userSchema)

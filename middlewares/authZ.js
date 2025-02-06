@@ -60,23 +60,41 @@ exports.isStudent=async(req,res)=>{
 
 //isInstructor
 exports.isInstructor=async(req,res,next)=>{
-    if(req.user.accountType!=="Instructor"){
-        return res.status(401).json({
-            success:true,
-            message:"This is a protected route for instructors only"
+    try {
+        if(req.user.accountType!=="Instructor"){
+            return res.status(401).json({
+                success:true,
+                message:"This is a protected route for instructors only"
+            })
+        }
+        next()
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            success:false,
+            message:"user role cannot be found"
         })
     }
-    next()
+    
 }
 
 
 //isAdmin
 exports.isAdmin=async(req,res,next)=>{
-    if(req.user.accountType!=="Admin"){
-        return res.status(401).json({
+    try {
+        if(req.user.accountType!=="Admin"){
+            return res.status(401).json({
+                success:false,
+                message:"this is the protected rourte for admin"
+            })
+        }
+        next()
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
             success:false,
-            message:"this is the protected rourte for admin"
+            message:"user role cannot be found"
         })
     }
-    next()
+    
 }

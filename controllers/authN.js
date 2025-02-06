@@ -163,9 +163,9 @@ exports.login=async(req,res)=>{
             const payload={
                 email:user.email,
                 id:user._id,
-                role:user.role
+                accountType:user.accountType
             }
-            const token=await jwt.sign(payload,process.env.JWT_SECRET,{
+            const token=jwt.sign(payload,process.env.JWT_SECRET,{
                 expiresIn:"2h",
             })
             user.token=token

@@ -1,4 +1,5 @@
 const mongoose=require("mongoose")
+const { resetPassword } = require("../controllers/authN")
 const userSchema=mongoose.Schema({
     firstname:{
         type:String,
@@ -34,6 +35,12 @@ const userSchema=mongoose.Schema({
     contactNumber:{
         type:Number,
         required:false
+    }
+    ,token:{
+        type:string
+    },
+    resetPasswordExpires:{
+        type:Date
     }
 })
 

@@ -33,7 +33,8 @@ const Tag=require('../models/Tag')
         const allTags=await Tag.find({},{name:true,description:true})
         return res.status(200).json({
             success:true,
-            message:"All tags are returned successfully"
+            message:"All tags are returned successfully",
+            data:allTags
         })
 
     } catch (error) {

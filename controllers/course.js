@@ -78,4 +78,22 @@ exports.createCourse=async(req,res)=>{
     }
 }
 
-//get all course
+//get all courseshandler function
+
+exports.showAllCourses=async(req,res)=>{
+    try {
+        const allCourseDetails=await Course.find({})
+        return res.status(200).json({
+            success:true,
+            message:"All the details of courses are successfully fetched"
+            ,data:allCourseDetails
+        })
+    } catch (error) {
+        console.log("some error while getting course details",error)
+
+        return res.status(500).json({
+            success:false,
+            message:"internal server error while fetching course details"
+        })
+    }
+}

@@ -148,7 +148,7 @@ exports.login=async(req,res)=>{
             return res.status(403).json({
                 success:false,
                 message:"all fields are required"
-            })
+            }) 
         }
         //user check karo 
         const user=await User.findOne({email}).populate("additionalDetails")

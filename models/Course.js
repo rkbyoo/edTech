@@ -1,4 +1,5 @@
 const mongoose=require("mongoose")
+const Category = require("./Category")
 const courseSchema=mongoose.Schema({
     courseName:{
         type:String
@@ -30,9 +31,9 @@ const courseSchema=mongoose.Schema({
     ,thumbnail:{
         type:String
     },
-    tag:[{
+    category:[{
         type:mongoose.Schema.Types.objectId,
-        ref:"Tag"
+        ref:"Category"
     }],
     studentEnrolled:[{
         type:mongoose.Schema.Types.objectId

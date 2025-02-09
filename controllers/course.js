@@ -1,18 +1,18 @@
 const Course=require("../models/Course")
-const Tag=require("../models/Tag")
 const User=require("../models/User")
 const {uploadToCloudinary}=require("../utils/imageUploader")
+const Category = require("../models/Category")
 
 //create course 
 
 exports.createCourse=async(req,res)=>{
     try {
         //data fetch 
-        const {courseName,courseDescription,whatYouWillLearn,price,tag}=req.body //here the tag id is in req body
+        const {courseName,courseDescription,whatYouWillLearn,price,category}=req.body //here the category id is in req body
         //get thumbnail
         const thumbnail=req.files.thumbnailImage
         //validation
-        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag || !thumbnail){
+        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !category || !thumbnail){
             return res.status(401).json({
                 success:false,
                 message:"Please fill up all the details"
@@ -30,12 +30,12 @@ exports.createCourse=async(req,res)=>{
         }
 
         //check given tag is valid or not
-        const tagDetails=await Tag.findById({tag})
-        if(!tagDetails)
+        const categoryDetails=await Category.findById({category})
+        if(!categoryDetails)
         {
             return res.status(404).json({
                 success:false,
-                message:"Tag is not found/Invalid"
+                message:"category is not found/Invalid"
             })
         }
 
@@ -49,7 +49,7 @@ exports.createCourse=async(req,res)=>{
             instructor:instructorDetails._id,
             whatYouWillLearn,
             price,
-            tag:tagDetails._id,
+            category:categoryDetails._id,
             thumbnail:thumbnailImage.secure_url
         })
 
@@ -82,6 +82,8 @@ exports.createCourse=async(req,res)=>{
 
 exports.showAllCourses=async(req,res)=>{
     try {
+
+        //TODO change the below statement
         const allCourseDetails=await Course.find({})
         return res.status(200).json({
             success:true,

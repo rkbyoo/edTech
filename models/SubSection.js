@@ -6,8 +6,6 @@ const subSectionSchema=mongoose.Schema({
     
     timeDuration:{
         type:String
-    },title:{
-        type:String,
     },
     description:{
         type:String

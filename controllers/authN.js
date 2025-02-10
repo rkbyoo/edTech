@@ -90,7 +90,7 @@ exports.signUp=async(req,res)=>{
         //otp not found
         return res.status(400).json({
             success:false,
-            message:"OTP found"
+            message:"OTP not defined"
         })
     }else if(otp!==recentOtp.otp){
         //invalid otp
@@ -126,7 +126,7 @@ exports.signUp=async(req,res)=>{
     return res .status(200).json({
         success:false,
         message:"User Created successfully",
-        user
+        data:user
     })
  } catch (error) {
     console.log(error)

@@ -30,7 +30,7 @@ const Category=require('../models/Category')
 
  exports.showAllCategory=async(req,res)=>{
     try {
-        const allCategory=await Tag.find({},{name:true,description:true})
+        const allCategory=await Category.find({},{name:true,description:true})
         return res.status(200).json({
             success:true,
             message:"All categories are returned successfully",

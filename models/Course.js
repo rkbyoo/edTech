@@ -31,10 +31,14 @@ const courseSchema=mongoose.Schema({
     ,thumbnail:{
         type:String
     },
-    category:[{
+    tags:{
+        type:[String],
+        required:true
+    },
+    category:{
         type:mongoose.Schema.Types.objectId,
         ref:"Category"
-    }],
+    },
     studentEnrolled:[{
         type:mongoose.Schema.Types.objectId
         ,required:true,

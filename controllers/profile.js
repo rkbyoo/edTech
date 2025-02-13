@@ -72,7 +72,7 @@ exports.deleteAcccount=async(req,res)=>{
         })
     }
 
-    //update the course schema by unenrolling the students
+    //update the course schema by unenrolling the students(TODO :DOUBT)
     await Course.findByIdAndUpdate({_id:userExists.courses},{$pull:{studentEnrolled:userId}})
 
     //delete profile and delete user
@@ -101,17 +101,19 @@ exports.getAllUserDetails=async(req,res)=>{
     //get required user id
     const userId=req.user.id
     //validation ,find the user details from db
-    const userDetails=await User.findById({userId})
+    const userDetails=await User.findById(userId).populate("additionalDetails").exec()
     if(!userDetails){
         return res.status(404).json({
             success:false,
             message:"user not found in the database"
+            
         })
     }
     //return res
     return res.status(200).json({
         success:true,
-        message:"All user details fetched successfully"
+        message:"All user details fetched successfully",
+        data:userDetails
     })
     } catch (error) {
         console.error("some error while getting user details",error)

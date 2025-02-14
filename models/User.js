@@ -1,5 +1,6 @@
 const mongoose=require("mongoose")
 const { resetPassword } = require("../controllers/authN")
+const RatingAndReview = require("./RatingAndReview")
 const userSchema=mongoose.Schema({
     firstname:{
         type:String,
@@ -41,7 +42,12 @@ const userSchema=mongoose.Schema({
     },
     resetPasswordExpires:{
         type:Date
+    },
+    ratingAndReview:{
+        type:mongoose.Types.ObjectId,
+        required:false
     }
+    
 })
 
 module.exports=mongoose.model("User",userSchema)

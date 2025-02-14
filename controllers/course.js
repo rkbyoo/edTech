@@ -78,6 +78,65 @@ exports.createCourse=async(req,res)=>{
     }
 }
 
+//get course details
+
+exports.getCourseDetails=async(re,res)=>{
+    try {
+        //fetch the courseId 
+    const courseId=req.params
+    //validate the course id 
+    if(!courseId){
+        return res.status(404).json({
+            success:false,
+            message:"course id didnot found"
+        })
+    }
+    const courseDetails=await Course.findById(courseId)
+    if(!courseDetails){
+        return res.status(404).json({
+            success:false,
+            message:"no course details found"
+        })
+    }
+
+    //return res
+    return res.status(200).json({
+        success:true,
+        message:"The course Detail has been fetched successfully"
+    })
+    } catch (error) {
+        console.error("some error while course get function",error)
+        return res.status(500).json({
+            success:false,
+            message:"internal server error while get course details "
+        })
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //get all courseshandler function
 
 exports.showAllCourses=async(req,res)=>{

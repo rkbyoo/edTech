@@ -11,7 +11,8 @@ const Course = require("../models/Course")
 //to create a rating and review(TODO add the course id thing in it )
 
 exports.createRatingAndReview=async(req,res)=>{
-//fetch the rating and review datas 
+    try {
+        //fetch the rating and review datas 
 const userId=req.user.id
 const {review,rating,courseId}=req.body
 //check validation of data
@@ -41,6 +42,14 @@ return res.status(200).json({
     message:"Rating and review created successfully",
     data:ratingDetails
 })
+    } catch (error) {
+        console.error("some error while creating rating and review")
+        return res.status(500).json({
+            success:false,
+            message:"internal server error while creating course"
+        })
+    }
+
 }
 
 

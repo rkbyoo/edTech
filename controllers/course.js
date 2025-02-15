@@ -80,10 +80,10 @@ exports.createCourse=async(req,res)=>{
 
 //get course details
 
-exports.getCourseDetails=async(re,res)=>{
+exports.getCourseDetails=async(req,res)=>{
     try {
         //fetch the courseId 
-    const courseId=req.params
+    const {courseId}=req.body
     //validate the course id 
     if(!courseId){
         return res.status(404).json({
@@ -91,9 +91,10 @@ exports.getCourseDetails=async(re,res)=>{
             message:"course id didnot found"
         })
     }
-    const courseDetails=await Course.findById(courseId)
+    const courseDetails=await Course.findById(courseId).populate({path:"instructor",populate:{path:"additionalDetails"}})
+    .populate("category").populate("ratingAndReview").populate({path:"courseContent",populate:{path:"subSection"}})
     if(!courseDetails){
-        return res.status(404).json({
+        return res.status(400).json({
             success:false,
             message:"no course details found"
         })
@@ -103,6 +104,7 @@ exports.getCourseDetails=async(re,res)=>{
     return res.status(200).json({
         success:true,
         message:"The course Detail has been fetched successfully"
+        ,data:courseDetails
     })
     } catch (error) {
         console.error("some error while course get function",error)
@@ -113,27 +115,6 @@ exports.getCourseDetails=async(re,res)=>{
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

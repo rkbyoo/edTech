@@ -22,17 +22,25 @@ if(!userId || !rating || !review){
         message:"required field are missing"
     })
 }
-//check the user and course id is valid or not 
-const user=User.findById(userId)
-const course=await Course.findById(courseId)
-if(!user || !course){
+//check the user and course id is valid or not also check that user alredy exists in rating or not
+const userDetails=User.findById(userId)
+const courseDetails=await Course.findById({_id:courseId,studentEnrolled:{$eleMatch:{$eq:userId}}})
+if(!courseDetails){
     return res.status(404).json({
         success:false,
-        message:"course and user not found"
+        message:"student is nor enrolled in the course"
+    })
+}
+//check user already reviewed or not 
+const alreadyReviewed=await RatingAndReview.findOne({user:userId,course:courseId})
+if(alreadyReviewed){
+    return res.status(401).json({
+        success:false,
+        message:"User already reviewed the course"
     })
 }
 //create rating and update user and course schema 
-const ratingDetails=await RatingAndReview.create({user:userId,review,rating},{new:true})
+const ratingDetails=await RatingAndReview.create({user:userId,course:courseId,review,rating},{new:true})
 await User.findOneAndUpdate({userId},{$push:{ratingAndReview:ratingDetails._id}},{new:true})
 await Course.findOneAndUpdate({courseId},{$push:{ratingAndReview:ratingDetails._id}})
 
@@ -61,3 +69,34 @@ return res.status(200).json({
 // }
 
 
+
+//create getavgrating
+exports.getAvgRating=async(req,res)=>{
+    const allRating=await RatingAndReview.find({})
+}
+
+
+
+//create getallrating
+
+exports.getAllRating=async(req,res)=>{
+    try {
+        const allRatingDetails=await RatingAndReview.find({})
+        if(!allRatingDetails){
+            return res.status(404).json({
+                success:false,
+                message:"no ratings available"
+            })
+        }
+        res.status(200).json({
+            success:true,
+            message:" all rating fetched"
+            ,data:ratingDetails
+        })
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            message:"some error occured while fetching ratings"
+        })
+    }
+}

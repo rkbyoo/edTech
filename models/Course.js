@@ -43,7 +43,14 @@ const courseSchema=mongoose.Schema({
         type:mongoose.Schema.Types.objectId
         ,required:true,
         ref:"User"
-    }]
+    }],
+    instructions:{
+        type:[String]
+    },
+    status:{
+        type:String,
+        enum:["Drafts","Published"]
+    }
 
 })
 

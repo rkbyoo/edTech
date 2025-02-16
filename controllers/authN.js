@@ -5,6 +5,7 @@ const bcrypt=require("bcrypt")
 const Profile = require("../models/Profile")
 const jwt=require("jsonwebtoken")
 const maileSender=require("../utils/mailsender")
+const passwordChangedMail=require("../mail/templates/passwordUpdate")
 require("dotenv").config()
 //otp generation and sending
 exports.sendOTP=async(req,res)=>{
@@ -226,10 +227,10 @@ exports.resetPassword=async(req,res)=>{
         })
     }
     //check old password & updating the password
-    if(await jwt.compare(oldPassword,user.password)){
+    if(await bcrypt.compare(oldPassword,user.password)){
         await User.findOneAndUpdate({email},{password:newPassword})
         const body="Your Password is successfully changed,please make sure its you"
-        await maileSender(user.email,"Password Changed",body)
+        await maileSender(user.email,"Password Changed",passwordChangedMail)
 
     }
     else{

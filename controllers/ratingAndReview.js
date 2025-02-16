@@ -70,7 +70,8 @@ catch (error) {
 
 //create getavgrating
 exports.getAvgRating=async(req,res)=>{
-    //get course ID
+    try {
+        //get course ID
     const courseId=req.body.courseId
     //calculate avg rating
     const result=await RatingAndReview.aggregate([
@@ -100,6 +101,14 @@ exports.getAvgRating=async(req,res)=>{
         success:true,
         averageRating:"average Rating is 0,no ratings given till now"
     })
+        
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            message:"some error occured cgetting avg ratings"
+        })
+    }
+    
 }
 
 
@@ -108,7 +117,9 @@ exports.getAvgRating=async(req,res)=>{
 
 exports.getAllRating=async(req,res)=>{
     try {
-        const allRatingDetails=await RatingAndReview.find({})
+        const allRatingDetails=await RatingAndReview.find({}).sort({rating:"desc"})
+        .populate({path:"user",select:"firstName lastName email image" })
+        .populate({path:"course",select:"courseName"}).exec()
         if(!allRatingDetails){
             return res.status(404).json({
                 success:false,
@@ -124,6 +135,28 @@ exports.getAllRating=async(req,res)=>{
         res.status(500).json({
             success:false,
             message:"some error occured while fetching ratings"
+        })
+    }
+}
+
+
+//course specific get rating and review
+exports.getCourseRating=async(req,res)=>{
+    try {
+       //get course id
+       const courseId=req.body.courseId
+       //find that course id entry in the Course schema and then populate it on rating and review and user only
+       const courseDetail=await Course.findOne({_id:courseId},{ratingAndReview:true}).populate({path:"ratingAndReview",select:"user review rating"}).exec()
+       //return res
+       return res.status(200).json({
+        success:true,
+        message:"course details are fetched successfully"
+        ,data:courseDetail
+       })
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            message:"some error occured while fetching specific course ratings"
         })
     }
 }

@@ -4,6 +4,12 @@ const bcrypt=require('bcrypt')
 
 
 //reset password token ,send the link to reset email ps
+
+//creating a token & saving it in user database with time and sending a url having that token in the registered mail 
+//fetching the token from url and matching it with the user database token with expiry time and hashing new ps and updating prev one
+
+
+
 exports.resetPasswordToken=async(req,res)=>{
 try {
     //get the email from req body
@@ -18,7 +24,7 @@ try {
     }
     //generate token and expiration time and update it in user module
     const token=crypto.randomUUID();
-    const updateDetails=await User.findOneAndUpdate({email},{
+    await User.findOneAndUpdate({email},{
         token:token,
         resetPasswordExpires:Date.now()+5*60*1000
     },{new:true})
@@ -41,13 +47,14 @@ try {
 }
 
 //reset password
-exports.resetPassword=async(req,res)=>{
+exports.resetPasswordWithToken=async(req,res)=>{
    try {
-    const {token,newPassword,newConfirmPassword}=req.body
-    if(!newPassword || newConfirmPassword || token){
+    const {newPassword,newConfirmPassword}=req.body
+    const token=req.params
+    if(!newPassword || !newConfirmPassword || !token){
         return res.status(403).json({
             success:false,
-            message:"please fillup the password"
+            message:"required token or field missing"
         })
     }
     if(newPassword!==newConfirmPassword){
@@ -56,11 +63,11 @@ exports.resetPassword=async(req,res)=>{
             message:"password Didn't matched"
         })
     }
-    const userDetails=await User.findOne({token})
+    const userDetails=await User.findOne({token:token})
    if(!userDetails){
     return res.json({
         success:false,
-        message:"token is not valid"
+        message:"token is not found"
     })
    }
    if(userDetails.resetPasswordExpires < Date.now()){

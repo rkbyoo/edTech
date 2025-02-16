@@ -8,7 +8,7 @@ const Category = require("../models/Category")
 exports.createCourse=async(req,res)=>{
     try {
         //data fetch 
-        const {courseName,courseDescription,whatYouWillLearn,price,category}=req.body //here the category id is in req body
+        const {courseName,courseDescription,whatYouWillLearn,price,categoryId}=req.body //here the category id is in req body
         //get thumbnail
         const thumbnail=req.files.thumbnailImage
         //validation
@@ -29,8 +29,8 @@ exports.createCourse=async(req,res)=>{
             })
         }
 
-        //check given tag is valid or not
-        const categoryDetails=await Category.findById({category})
+        //check given category is valid or not
+        const categoryDetails=await Category.findById({categoryId})
         if(!categoryDetails)
         {
             return res.status(404).json({
@@ -60,7 +60,7 @@ exports.createCourse=async(req,res)=>{
             ,{new:true}
         )
         //update the tag schema
-        await Tag.findByIdAndUpdate({tag},{$push:{course:newCourse._id}},{new:true})
+        await Category.findByIdAndUpdate({categoryId},{$push:{course:newCourse._id}},{new:true})
         
         //return res
         return res.status(200).json({

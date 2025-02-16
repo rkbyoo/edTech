@@ -17,8 +17,8 @@ exports.mailUserAndAdmin=async(req,res)=>{
         })
     }
     //send a mail to the user and admin
-    await maileSender(email,"We Got Your Response",responseMailBody)
-    await maileSender(process.env.adminMailId,"you got a response",mailMyself)
+    await maileSender(email,"We Got Your Response",responseMailBody(firstName))
+    await maileSender(process.env.adminMailId,"you got a response",mailMyself(firstName,lastName,email,message))
     //return res
     return res.status(200).json({
         success:true,

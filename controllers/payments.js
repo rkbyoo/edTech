@@ -99,7 +99,7 @@ exports.verifySignature=async(req,res)=>{
 
     const signature=req.headers["x-razorpay-signature"]
 
-    const shasum=crypto.createHmac("sha256",weebhookSecret)
+    const shasum=crypto.createHmac("sha256",weebhookSecret) //sha256 is algo for webhook
     shasum.update(JSON.stringify(req.body))
     const digest=shasum.digest("hex");
     if(signature===digest){

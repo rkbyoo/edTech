@@ -202,7 +202,7 @@ exports.login=async(req,res)=>{
 }
 
 //change password
-exports.resetPassword=async(req,res)=>{
+exports.changePassword=async(req,res)=>{
     try {
           //fetching the data
     const {oldPassword,newPassword,confirmNewPassword,email}=req.body

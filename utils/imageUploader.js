@@ -1,6 +1,6 @@
 const cloudinary = require("cloudinary").v2
 
-exports.uploadToCloudinary = async(file, folder, height, quality) = {
+exports.uploadToCloudinary = async(file, folder, height, quality) => {
     try {
         const options = { folder }
         if(height) {
@@ -9,7 +9,7 @@ exports.uploadToCloudinary = async(file, folder, height, quality) = {
         if(quality){
             options.quality=quality
         }
-        if(quality)
+        return await cloudinary.uploader.upload(file.tempFilePath,options)
     } catch(error) {
         console.error("some error while uploading file to cloudinary")
     }

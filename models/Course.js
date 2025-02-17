@@ -9,7 +9,7 @@ const courseSchema=mongoose.Schema({
         required:true
     }
     ,instructor:{
-        type:mongoose.Schema.Types.objectId
+        type:mongoose.Schema.Types.ObjectId
         ,ref:"User",
         required:true
     },
@@ -18,11 +18,11 @@ const courseSchema=mongoose.Schema({
         trim:true
     },
     courseContent:[{
-        type:mongoose.Schema.Types.objectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"Section"
     }],
     ratingAndReviews:[{
-        type:mongoose.Schema.Types.objectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"RatingAndReview",
     }],
     Price:{
@@ -36,11 +36,11 @@ const courseSchema=mongoose.Schema({
         required:true
     },
     category:{
-        type:mongoose.Schema.Types.objectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"Category"
     },
     studentEnrolled:[{
-        type:mongoose.Schema.Types.objectId
+        type:mongoose.Schema.Types.ObjectId
         ,required:true,
         ref:"User"
     }],

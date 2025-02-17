@@ -2,7 +2,6 @@
 const RatingAndReview=require("../models/RatingAndReview")
 const Course=require("../models/Course")
 const User=require("../models/User")
-const Course = require("../models/Course")
 const { default: mongoose } = require("mongoose")
 
 

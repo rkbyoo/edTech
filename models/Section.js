@@ -6,7 +6,7 @@ const SectionSchema=mongoose.Schema({
    }
    ,SubSection:[
     {
-        type:mongoose.Schema.Types.objectId
+        type:mongoose.Schema.Types.ObjectId
         ,required:true
         ,ref:"SubSection"
     }

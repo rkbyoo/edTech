@@ -27,4 +27,4 @@ router.post("/contact",mailUserAndAdmin)
 
 
 
-exports.module=router
+module.exports=router

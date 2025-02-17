@@ -19,9 +19,9 @@ router.get("/getcourse/:id",auth,isInstructor,getCourseDetails)
 //create courses
 router.post("/createcourses",auth,isInstructor,createCourse)
 //update courses 
-router.put("/updatecourses/:id",auth,isInstructor,updateCourse)
+// router.put("/updatecourses/:id",auth,isInstructor,updateCourse)
 //delete courses
-router.delete("/deletecourse/:id",auth,isInstructor,deleteCourse)
+// router.post("/deletecourse/:id",auth,isInstructor,deleteCourse)
 
 
 //api endpoint of categories

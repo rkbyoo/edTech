@@ -3,11 +3,8 @@ const Course=require("../models/Course")
 const User=require("../models/User")
 
 const mailSender=require("../utils/mailsender")
-
-
 const {courseEnrollmentEmail}=require("../mail/templates/courseEnrollmentEmail")
 const { default: mongoose } = require("mongoose")
-const { default: webhooks } = require("razorpay/dist/types/webhooks")
 
 
 //capture the payment and initiate the razorpay order

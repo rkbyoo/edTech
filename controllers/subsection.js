@@ -1,7 +1,6 @@
 const Subsection=require("../models/SubSection")
 const Section=require("../models/Section")
 const { uploadToCloudinary } = require("../utils/imageUploader")
-const Section = require("../models/Section")
 const { findById } = require("../models/Category")
 const SubSection = require("../models/SubSection")
 

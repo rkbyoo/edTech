@@ -5,7 +5,7 @@ const router=express.Router()
 
 
 const {updateProfile,deleteAcccount,getAllUserDetails,getEnrolledCourses,updateDisplayPicture}=require("../controllers/profile")
-
+const {auth}=require("../middlewares/authZ")
 
 
 //api for user details

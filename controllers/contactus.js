@@ -2,7 +2,7 @@
 require("dotenv").config()
 const maileSender = require("../utils/mailsender")
 const responseMailBody=require("../mail/templates/responseSent")
-const mailMyself=require("../mail/templates/userResponseMail")
+const mailMyself=require("../mail/templates/mailMyself")
 
 //send mail to user
 exports.mailUserAndAdmin=async(req,res)=>{

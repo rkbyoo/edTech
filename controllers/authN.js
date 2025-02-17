@@ -59,86 +59,106 @@ exports.sendOTP=async(req,res)=>{
 
 
 //singup
-exports.signUp=async(req,res)=>{
- try {
-    const {email,firstName,lastName,contactNumber,password,confirmPassword,otp,accountType}=req.body
-    //necessary parameter validation
-    if(!email || !firstName || !lastName || !password || !confirmPassword || !otp )
-    {
-        return res.status(403).json({
-            success:false,
-            message:"all fields are not present"
-        })
-    }
-    //2 password match
-    if(password!==confirmPassword){
-        return res.status(401).json({
-            success:false,
-            message:"password didnt matched"
-        })
-    }
-    //user exist or not validaiton
-    const userExist=await User.findOne({email})
-    if(userExist){
-        return res.status(400).json({
-            success:false,
-            message:"user already exists"
-        })
-    } 
-    //find the recent otp in the schema 
-    const recentOtp=await OTP.find({email}).sort({createdAt:-1}).limit(1);
-    console.log(recentOtp)
-    //validate otp here 
-    if(recentOtp.length==0){
-        //otp not found
-        return res.status(400).json({
-            success:false,
-            message:"OTP not defined"
-        })
-    }else if(otp!==recentOtp.otp){
-        //invalid otp
-        return res.status(400).json({
-            success:false,
-            message:"Invalid OTP"
-        })
-    }
+exports.signUp = async (req, res) => {
+	try {
+		// Destructure fields from the request body
+		const {
+			firstName,
+			lastName,
+			email,
+			password,
+			confirmPassword,
+			accountType,
+			contactNumber,
+			otp,
+		} = req.body;
+		// Check if All Details are there or not
+		if (
+			!firstName ||
+			!lastName ||
+			!email ||
+			!password ||
+			!confirmPassword ||
+			!otp
+		) {
+			return res.status(403).send({
+				success: false,
+				message: "All Fields are required",
+			});
+		}
+		// Check if password and confirm password match
+		if (password !== confirmPassword) {
+			return res.status(400).json({
+				success: false,
+				message:
+					"Password and Confirm Password do not match. Please try again.",
+			});
+		}
 
+		// Check if user already exists
+		const existingUser = await User.findOne({ email });
+		if (existingUser) {
+			return res.status(400).json({
+				success: false,
+				message: "User already exists. Please sign in to continue.",
+			});
+		}
 
-    //hash passwords
-    const hashedPassword=bcrypt.hash(10,password)
+		// Find the most recent OTP for the email
+		const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
+		console.log(response);
+		if (response.length === 0) {
+			// OTP not found for the email
+			return res.status(400).json({
+				success: false,
+				message: "The OTP is not valid",
+			});
+		} else if (otp !== response[0].otp) {
+			// Invalid OTP
+			return res.status(400).json({
+				success: false,
+				message: "The OTP is not valid",
+			});
+		}
 
-    //saving the user in DB
-    const profileDetails=await Profile.create({
-        gender:null,
-        dob:null,
-        about:null,
-        contactNumber:null
-    })
-    const user=await User.create(
-        {   
-            email,
-            firstName,
-            lastName,
-            password:hashedPassword,
-            accountType,
-            additonalDetails:profileDetails._id,
-            image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
-            ,contactNumber
-        })
+		// Hash the password
+		const hashedPassword = await bcrypt.hash(password, 10);
 
-    return res .status(200).json({
-        success:false,
-        message:"User Created successfully",
-        data:user
-    })
- } catch (error) {
-    console.log(error)
-    res.status(500).json({
-        success:false,
-        message:"some error occured while signup"
-    })
- }
+		// Create the user
+		let approved = "";
+		approved === "Instructor" ? (approved = false) : (approved = true);
 
+		// Create the Additional Profile For User
+		const profileDetails = await Profile.create({
+			gender: null,
+			dateOfBirth: null,
+			about: null,
+			contactNumber: null,
+		});
+		const user = await User.create({
+			firstName,
+			lastName,
+			email,
+			contactNumber,
+			password: hashedPassword,
+			accountType: accountType,
+			approved: approved,
+			additionalDetails: profileDetails._id,
+			image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
+		});
+
+		return res.status(200).json({
+			success: true,
+			user,
+			message: "User registered successfully",
+		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({
+			success: false,
+			message: "User cannot be registered. Please try again.",
+		});
+	}
 }
 
 //login 
@@ -154,7 +174,7 @@ exports.login=async(req,res)=>{
             }) 
         }
         //user check karo 
-        const user=await User.findOne({email}).populate("additionalDetails")
+        const user=await User.findOne({email})
         if(!user){
             return res.status(401).json({
                 success:false,

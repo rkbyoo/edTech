@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    firstname: {
+    firstName: {
         type: String,
         required: true,
         trim: true
     },
-    lastname: {
+    lastName: {
         type: String,
         required: true,
         trim: true
@@ -15,14 +15,18 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    password:{
+        type:String
+        ,required:true
+    },
     additonalDetails: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        required: false,
         ref: "Profile",
     },
     image: {
         type: String,
-        required: true
+        required: false
     },
     courses: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -48,7 +52,6 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-// ✅ Prevent overwriting the model
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 module.exports = User;

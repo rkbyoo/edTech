@@ -13,11 +13,11 @@ const {auth}=require("../middlewares/authZ")
 
 
 //api endpoints of authN
-router.post("/auth/signup",signUp)
-router.post("/auth/login",auth,login)
-router.post("/auth/sendotp",sendOTP)
-router.post("/auth/forget-password",resetPasswordToken)
-router.put("/auth/change-password",auth,changePassword)
+router.post("/signup",signUp)
+router.post("/login",login)
+router.post("/sendotp",sendOTP)
+router.post("/forget-password",resetPasswordToken)
+router.put("/change-password",auth,changePassword)
 
 
 

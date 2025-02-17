@@ -23,10 +23,10 @@ app.use(fileupload({
 }))
 app.use(express.json())
 app.use(cookieParser())
-app.use("/api/v1",courseRouter)
-app.use("/api/v1",paymentRouter)
-app.use("/api/v1",profileRouter)
-app.use("/api/v1",userRouter)
+app.use("/api/v1/course",courseRouter)
+app.use("/api/v1/payment",paymentRouter)
+app.use("/api/v1/profile",profileRouter)
+app.use("/api/v1/auth",userRouter)
 
 //cors
 app.use(cors({

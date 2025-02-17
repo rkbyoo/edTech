@@ -15,7 +15,7 @@ const {auth}=require("../middlewares/authZ")
 //api endpoints of authN
 router.post("/auth/signup",signUp)
 router.post("/auth/login",auth,login)
-router.post("/auth/verify-otp",sendOTP)
+router.post("/auth/sendotp",sendOTP)
 router.post("/auth/forget-password",resetPasswordToken)
 router.put("/auth/change-password",auth,changePassword)
 

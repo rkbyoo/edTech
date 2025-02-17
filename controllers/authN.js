@@ -4,8 +4,10 @@ const otpGenerator=require("otp-generator")
 const bcrypt=require("bcrypt")
 const Profile = require("../models/Profile")
 const jwt=require("jsonwebtoken")
-const maileSender=require("../utils/mailsender")
 const passwordChangedMail=require("../mail/templates/passwordUpdate")
+const otpTemplate=require("../mail/templates/emailVerificationTemplate")
+
+
 require("dotenv").config()
 //otp generation and sending
 exports.sendOTP=async(req,res)=>{
@@ -39,10 +41,10 @@ exports.sendOTP=async(req,res)=>{
     const OtpPayload={email,otp}
     const otpBody=await OTP.create(OtpPayload)
     console.log(otpBody)
-
     return res.status(200).json({
         success:true,
-        message:"OTP sent successfully"
+        message:"OTP sent successfully",
+        otp:otp
     })
 
     } catch (error) {

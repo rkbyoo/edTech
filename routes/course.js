@@ -13,11 +13,11 @@ const {auth,isStudent,isAdmin,isInstructor}=require("../middlewares/authZ")
 
 //api endpoints of courses
 //show all courses
-router.get("/showcourses",auth,isStudent,showAllCourses)
+router.get("/showCourses",auth,isStudent,showAllCourses)
 //show particular course details
-router.get("/getcourse/:id",auth,isInstructor,getCourseDetails)
+router.get("/getCourse/:id",auth,isInstructor,getCourseDetails)
 //create courses
-router.post("/createcourses",auth,isInstructor,createCourse)
+router.post("/createCourse",auth,isInstructor,createCourse)
 //update courses 
 // router.put("/updatecourses/:id",auth,isInstructor,updateCourse)
 //delete courses
@@ -26,21 +26,25 @@ router.post("/createcourses",auth,isInstructor,createCourse)
 
 //api endpoint of categories
 //category page details like top selling,others
-router.post("/category",categoryPageDetails)
+router.get("/categoryPageDetails",categoryPageDetails)
 //all category courses
-router.get("/allcategory",showAllCategory)
+router.get("/getAllCategory",showAllCategory)
 //create new category
 router.post("/createCategory",auth,isAdmin,createCategory)
+
+
 
 //api endpoint for ratings
 router.post("/createRating",auth,isStudent,createRatingAndReview)
 router.get("/getAvgRating",getAvgRating)
-router.get("/allreview",getAllRating)
+router.get("/allReview",getAllRating)
 router.get("/courseRating",getCourseRating)
+
+
 
 //api endpoint for section and subsection
 router.post("/createSection",auth,isInstructor,createSection)
-router.put("/updatesection",auth,isInstructor,updateSection)
+router.put("/updateSection",auth,isInstructor,updateSection)
 router.delete("/deleteSection",auth,isInstructor,deleteSection)
 
 router.post("createSubSection",auth,isInstructor,createSubsection)

@@ -8,11 +8,12 @@ const Category = require("../models/Category")
 exports.createCourse=async(req,res)=>{
     try {
         //data fetch 
-        const {courseName,courseDescription,whatYouWillLearn,price,categoryId}=req.body //here the category id is in req body
+        const {courseName,courseDescription,whatYouWillLearn,price,categoryId,tags,instructions}=req.body //here the category id is in req body
         //get thumbnail
         const thumbnail=req.files.thumbnailImage
         //validation
-        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !category || !thumbnail){
+        console.log(courseName,courseDescription,whatYouWillLearn,price,categoryId,tags,instructions)
+        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !categoryId || !thumbnail || !tags || !instructions){
             return res.status(401).json({
                 success:false,
                 message:"Please fill up all the details"
@@ -20,7 +21,7 @@ exports.createCourse=async(req,res)=>{
         }
         //check for instructor 
         const userId=req.user.id
-        const instructorDetails=await User.findById({userId})
+        const instructorDetails=await User.findById(userId)
         console.log("instructor Details",instructorDetails)
         if(!instructorDetails){
             return res.status(404).json({
@@ -30,7 +31,7 @@ exports.createCourse=async(req,res)=>{
         }
 
         //check given category is valid or not
-        const categoryDetails=await Category.findById({categoryId})
+        const categoryDetails=await Category.findById(categoryId)
         if(!categoryDetails)
         {
             return res.status(404).json({
@@ -49,9 +50,11 @@ exports.createCourse=async(req,res)=>{
             instructor:instructorDetails._id,
             whatYouWillLearn,
             price,
+            tags,
+            instructions,
             category:categoryDetails._id,
             thumbnail:thumbnailImage.secure_url
-        })
+        },{new:true})
 
         //add the new user to the user schema of instructor
         await User.findByIdAndUpdate(
@@ -60,7 +63,7 @@ exports.createCourse=async(req,res)=>{
             ,{new:true}
         )
         //update the tag schema
-        await Category.findByIdAndUpdate({categoryId},{$push:{course:newCourse._id}},{new:true})
+        await Category.findByIdAndUpdate(categoryId,{$push:{course:newCourse._id}},{new:true})
         
         //return res
         return res.status(200).json({

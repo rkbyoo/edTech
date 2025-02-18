@@ -49,9 +49,10 @@ const courseSchema=mongoose.Schema({
     },
     status:{
         type:String,
-        enum:["Drafts","Published"]
+        enum:["Drafts","Published"],
+        default:"Drafts"
     }
 
 })
 
-module.exports=mongoose.model("SubSection",courseSchema)
+module.exports=mongoose.model("Course",courseSchema)

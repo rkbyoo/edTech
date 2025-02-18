@@ -16,11 +16,6 @@ const {auth}=require("../middlewares/authZ")
 router.post("/signup",signUp)
 router.post("/login",login)
 router.post("/sendotp",sendOTP)
-router.post("/forget-password",resetPasswordToken)
-router.put("/change-password",auth,changePassword)
-
-
-
 
 //api endpoint of contact us
 router.post("/contact",mailUserAndAdmin)

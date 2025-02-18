@@ -1,6 +1,7 @@
 const User=require("../models/User")
 const mailSender=require("../utils/mailsender")
 const bcrypt=require('bcrypt')
+const crypto=require("crypto")
 
 
 //reset password token ,send the link to reset email ps
@@ -50,7 +51,7 @@ try {
 exports.resetPasswordWithToken=async(req,res)=>{
    try {
     const {newPassword,newConfirmPassword}=req.body
-    const token=req.params
+    const token=req.params.id
     if(!newPassword || !newConfirmPassword || !token){
         return res.status(403).json({
             success:false,

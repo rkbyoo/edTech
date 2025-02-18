@@ -2,7 +2,7 @@ const Profile=require("../models/Profile")
 const User=require("../models/User")
 const Course=require("../models/Course")
 const {uploadToCloudinary}=require("../utils/imageUploader")
-const mongoose=require("mongoose")
+const bcrypt=require("bcrypt")
 
 //update profle because we already created it with null values
 
@@ -44,60 +44,67 @@ exports.updateProfile=async(req,res)=>{
 
 
 //delete account
-exports.deleteAcccount=async(req,res)=>{
+exports.deleteAcccount = async (req, res) => {
     try {
-     //get the required details to delete account 
-    const {password,confirmPassword}=req.body
-    const userId=req.user.id
-    //validation
-    if(!password || !confirmPassword){
-        return res.status(404).json({
-            success:false,
-            message:"required fields are missing"
-        })
-    }
-    if(password!==confirmPassword){
-        return res.status(401).json({
-            success:false,
-            message:"password didnt matched"
-        })
-    }
-    const userExists=await User.findById({userId})
-    if(!userExists){
-        return res.status(404).json({
-            success:false,
-            message:"user not found"
-        })
-    }
-    //check password and then delete 
-    if(userExists.password!==password){
-        return res.status(402).json({
-            success:false,
-            message:"password is not correct"
-        })
-    }
+        // Get the required details to delete the account
+        const { password, confirmPassword } = req.body;
+        const userId = req.user.id;
 
-    //update the course schema by unenrolling the students(TODO :DOUBT)
-    await Course.findByIdAndUpdate({_id:userExists.courses},{$pull:{studentEnrolled:userId}})
+        // Validation
+        if (!password || !confirmPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "Required fields are missing",
+            });
+        }
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "Passwords do not match",
+            });
+        }
 
-    //delete profile and delete user
-    await Profile.findByIdAndDelete({_id:userExists.additionalDetails})
-    await User.findByIdAndDelete({userId})
-    //return res
-    return res.status(200).json({
-        success:true,
-        message:"deleted the account successfully"
-    })
+        const userExists = await User.findById(userId);
+        if (!userExists) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        // Check password using bcrypt
+        const isPasswordValid = await bcrypt.compare(password, userExists.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                success: false,
+                message: "Password is incorrect",
+            });
+        }
+
+        // Unenroll user from courses
+        await Course.updateMany(
+            { _id: { $in: userExists.courses } },
+            { $pull: { studentEnrolled: userId } }
+        );
+
+        // Delete profile and user
+        await Profile.findByIdAndDelete(userExists.additionalDetails);
+        await User.findByIdAndDelete(userId);
+
+        return res.status(200).json({
+            success: true,
+            message: "Deleted the account successfully",
+        });
+
     } catch (error) {
-        console.error("some error while deleting account",error)
+        console.error("Error while deleting account:", error);
         return res.status(500).json({
-            success:true,
-            message:"internal server error while deleting account"
-        }) 
+            success: false,
+            message: "Internal server error while deleting account",
+        });
     }
+};
 
-
-}
 
 
 //get all userDetails
@@ -131,10 +138,6 @@ exports.getAllUserDetails=async(req,res)=>{
 }
 
 
-
-
-
-
 exports.updateDisplayPicture = async (req, res) => {
     try {
       const displayPicture = req.files.displayPicture
@@ -145,7 +148,6 @@ exports.updateDisplayPicture = async (req, res) => {
         1000,
         1000
       )
-      console.log(image)
       const updatedProfile = await User.findByIdAndUpdate(
         { _id: userId },
         { image: image.secure_url },

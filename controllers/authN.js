@@ -4,8 +4,8 @@ const otpGenerator=require("otp-generator")
 const bcrypt=require("bcrypt")
 const Profile = require("../models/Profile")
 const jwt=require("jsonwebtoken")
-const passwordChangedMail=require("../mail/templates/passwordUpdate")
-const otpTemplate=require("../mail/templates/emailVerificationTemplate")
+const passwordChangedMail=require("../mail/templates/passwordUpdate").passwordUpdated
+const mailSender=require("../utils/mailsender")
 
 
 require("dotenv").config()
@@ -124,7 +124,7 @@ exports.signUp = async (req, res) => {
 			accountType,
 			approved,
 			additionalDetails: profileDetails._id,
-			image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
+			image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName}${lastName}`,
 		});
 
 		return res.status(200).json({
@@ -204,50 +204,64 @@ exports.login=async(req,res)=>{
     }
 }
 
-//change password
-exports.changePassword=async(req,res)=>{
+// Change Password Function
+exports.changePassword = async (req, res) => {
     try {
-          //fetching the data
-    const {oldPassword,newPassword,confirmNewPassword,email}=req.body
-    //validation
-    if(!oldPassword || !newPassword || !confirmNewPassword){
-        return res.status(401).json({
-            success:false,
-            message:"Please fill Up the details"
-        })
-    }
-    if(newPassword!==confirmNewPassword){
-        return res.status(300).json({
-            success:false,
-            message:"password doesnt matched"
-        })
-    }
-    const user=await User.findOne({email})
-    if(!user){
-        return res.status(200).json({
-            success:false,
-            message:"user not found"
-        })
-    }
-    //check old password & updating the password
-    if(await bcrypt.compare(oldPassword,user.password)){
-        await User.findOneAndUpdate({email},{password:newPassword})
-        const body="Your Password is successfully changed,please make sure its you"
-        await maileSender(user.email,"Password Changed",passwordChangedMail)
+        // Fetching the data
+        const { oldPassword, newPassword, confirmNewPassword } = req.body;
+        const email = req.user.email;
 
+        // Validation
+        if (!oldPassword || !newPassword || !confirmNewPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "Please fill in all the details",
+            });
+        }
+
+        if (newPassword !== confirmNewPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "New passwords do not match",
+            });
+        }
+
+        // Check if user exists
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        // Check old password & update the password
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid old password",
+            });
+        }
+
+        // Hash new password and update
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await User.findOneAndUpdate({ email }, { password: hashedPassword });
+
+        // Send email notification
+        await mailSender(user.email, "Password Changed", passwordChangedMail(email, "Dear User"));
+
+        // Return success response
+        return res.status(200).json({
+            success: true,
+            message: "Password changed successfully",
+        });
+
+    } catch (error) {
+        console.error("Error while changing password:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error while resetting password",
+        });
     }
-    else{
-        return res.status(401).json({
-            success:false,
-            message:"Invalid old Password"
-        })
-    }
-    }
-     catch (error) {
-        console.error("some error occured while changing password")
-        res.status(500).json({
-            success:false,
-            message:"internal server error while reseting password"
-        })
-    }
-}
+};

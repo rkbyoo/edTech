@@ -19,14 +19,18 @@ const userSchema = new mongoose.Schema({
         type:String
         ,required:true
     },
-    additonalDetails: {
+    accountType:{
+        type:String,
+        enum: ["Admin", "Student", "Instructor"],
+        required:true
+    },
+    additionalDetails: {
         type: mongoose.Schema.Types.ObjectId,
-        required: false,
         ref: "Profile",
+        required:true
     },
     image: {
         type: String,
-        required: false
     },
     courses: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -38,7 +42,6 @@ const userSchema = new mongoose.Schema({
     }],
     contactNumber: {
         type: Number,
-        required: false
     },
     token: {
         type: String
@@ -47,9 +50,9 @@ const userSchema = new mongoose.Schema({
         type: Date
     },
     ratingAndReview: {
-        type: mongoose.Types.ObjectId,
-        required: false
+        type: mongoose.Schema.Types.ObjectId,
     }
+    
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);

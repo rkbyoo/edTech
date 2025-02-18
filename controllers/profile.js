@@ -2,6 +2,7 @@ const Profile=require("../models/Profile")
 const User=require("../models/User")
 const Course=require("../models/Course")
 const {uploadToCloudinary}=require("../utils/imageUploader")
+const mongoose=require("mongoose")
 
 //update profle because we already created it with null values
 
@@ -12,8 +13,10 @@ exports.updateProfile=async(req,res)=>{
      const userId=req.user.id  //i got it from authZ middleware where i have pushed my user details as payload
 
      //using userid i got the profile id
-     const user=await User.findById({userId})
+     const user=await User.findById(userId)
      const profileId=user.additionalDetails
+     
+     console.log("this is profile id:",profileId)
      //validate
      if(!gender || !dateOfBirth || !about || !contactNumber || !profileId){
         return res.status(404).json({
@@ -22,7 +25,7 @@ exports.updateProfile=async(req,res)=>{
         })
      }
      //update profile 
-     const updatedProfileDetails=await Profile.findByIdAndUpdate({profileId},{gender,dateOfBirth,about,contactNumber},{new:true})
+     const updatedProfileDetails=await Profile.findByIdAndUpdate(profileId,{gender,dateOfBirth,about,contactNumber},{new:true})
      //return res
      return res.status(200).json({
         success:true,
@@ -30,6 +33,7 @@ exports.updateProfile=async(req,res)=>{
         data:updatedProfileDetails
      })
     } catch (error) {
+      console.error("error in profile detail updation",error)
         return res.status(500).json({
             success:false,
             message:"internal server error while updating profile"

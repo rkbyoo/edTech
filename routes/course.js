@@ -13,15 +13,15 @@ const {auth,isStudent,isAdmin,isInstructor}=require("../middlewares/authZ")
 
 //api endpoints of courses
 //show all courses
-router.get("/showCourses",auth,isStudent,showAllCourses)
+router.get("/getAllCourses",auth,showAllCourses)
 //show particular course details
-router.get("/getCourse/:id",auth,isInstructor,getCourseDetails)
+router.get("/getCourse/:id",auth,getCourseDetails)
 //create courses
 router.post("/createCourse",auth,isInstructor,createCourse)
 //update courses 
-// router.put("/updatecourses/:id",auth,isInstructor,updateCourse)
+// router.put("/updateCourses/:id",auth,isInstructor,updateCourse)
 //delete courses
-// router.post("/deletecourse/:id",auth,isInstructor,deleteCourse)
+// router.post("/deleteCourse/:id",auth,isInstructor,deleteCourse)
 
 
 //api endpoint of categories

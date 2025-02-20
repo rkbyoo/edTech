@@ -43,7 +43,7 @@ exports.auth=async(req,res,next)=>{
 //isStudent
 
 
-exports.isStudent=async(req,res)=>{
+exports.isStudent=async(req,res,next)=>{
     try {
         if(req.user.accountType!=="Student"){
             return res.status(401).json({

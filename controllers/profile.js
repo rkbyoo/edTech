@@ -87,7 +87,7 @@ exports.deleteAcccount = async (req, res) => {
             { $pull: { studentEnrolled: userId } }
         );
 
-        // Delete profile and user
+        // Delete profile and user and course
         await Profile.findByIdAndDelete(userExists.additionalDetails);
         await User.findByIdAndDelete(userId);
 

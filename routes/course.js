@@ -6,7 +6,7 @@ const router=express.Router()
 const {createCourse,getCourseDetails,showAllCourses,updateCourse,deleteCourse}=require("../controllers/course")
 const {createRatingAndReview,getAvgRating,getAllRating,getCourseRating}=require("../controllers/ratingAndReview")
 const {createSection,updateSection,deleteSection}=require("../controllers/section")
-const {createSubsection,deleteSubSection,updateSubSection}=require("../controllers/subsection")
+const {createSubSection,deleteSubSection,updateSubSection}=require("../controllers/subsection")
 const {showAllCategory,categoryPageDetails,createCategory}=require("../controllers/category")
 const {auth,isStudent,isAdmin,isInstructor}=require("../middlewares/authZ")
 
@@ -47,7 +47,7 @@ router.post("/createSection",auth,isInstructor,createSection)
 router.put("/updateSection",auth,isInstructor,updateSection)
 router.delete("/deleteSection/:id",auth,isInstructor,deleteSection)
 
-router.post("createSubSection",auth,isInstructor,createSubsection)
+router.post("createSubSection",auth,isInstructor,createSubSection)
 router.put("/updateSubsection",auth,isInstructor,updateSubSection)
 router.delete("/deleteSubSection",auth,isInstructor,deleteSubSection)
 

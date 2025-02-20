@@ -7,7 +7,7 @@ const SubSection = require("../models/SubSection")
 
 //create subsection
 
-exports.createSubsection=async(req,res)=>{
+exports.createSubSection=async(req,res)=>{
     try {
         //fetch the data
         const {title,timeDuration,description,sectionId}=req.body
@@ -23,7 +23,7 @@ exports.createSubsection=async(req,res)=>{
         const videoUpload=await uploadToCloudinary(videoFile,process.env.VIDEO_FOLDER)
         const createSubSection=await Subsection.create({title,timeDuration,description,videoUrl:videoUpload.secure_url})
         //update section schema
-        const updateSectionDetails=await Section.findByIdAndUpdate({sectionId},{$push:{SubSection:createSubSection._id}},{new:true}).populate("SubSection").exec()
+        const updateSectionDetails=await Section.findByIdAndUpdate(sectionId,{$push:{SubSection:createSubSection._id}},{new:true}).populate("SubSection").exec()
         
         //return res
         return res.status(200).json({

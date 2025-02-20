@@ -47,8 +47,8 @@ router.post("/createSection",auth,isInstructor,createSection)
 router.put("/updateSection",auth,isInstructor,updateSection)
 router.delete("/deleteSection/:id",auth,isInstructor,deleteSection)
 
-router.post("createSubSection",auth,isInstructor,createSubSection)
-router.put("/updateSubsection",auth,isInstructor,updateSubSection)
+router.post("/createSubSection",auth,isInstructor,createSubSection)
+router.put("/updateSubSection",auth,isInstructor,updateSubSection)
 router.delete("/deleteSubSection",auth,isInstructor,deleteSubSection)
 
 

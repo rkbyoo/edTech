@@ -15,7 +15,7 @@ const {auth,isStudent,isAdmin,isInstructor}=require("../middlewares/authZ")
 //show all courses
 router.get("/getAllCourses",auth,showAllCourses)
 //show particular course details
-router.get("/getCourse/:id",auth,getCourseDetails)
+router.get("/getCourseDetails/:id",auth,getCourseDetails)
 //create courses
 router.post("/createCourse",auth,isInstructor,createCourse)
 //update courses 

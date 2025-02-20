@@ -91,7 +91,7 @@ exports.createCourse = async (req, res) => {
 exports.getCourseDetails=async(req,res)=>{
     try {
         //fetch the courseId 
-    const courseId=req.params
+    const courseId=req.params.id
     //validate the course id 
     if(!courseId){
         return res.status(404).json({
@@ -102,7 +102,7 @@ exports.getCourseDetails=async(req,res)=>{
     const courseDetails=await Course.findById(courseId).populate({path:"instructor",populate:{path:"additionalDetails"}})
     .populate("category")
     //.populate("ratingAndReview")
-    .populate({path:"courseContent",populate:{path:"subSection"}}).exec()
+    .populate({path:"courseContent",populate:{path:"SubSection"}}).exec()
     if(!courseDetails){
         return res.status(400).json({
             success:false,

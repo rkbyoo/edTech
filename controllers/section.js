@@ -18,7 +18,7 @@ exports.createSection=async(req,res)=>{
     //create section
     const newSection=await Section.create({sectionName})
     //update course schema by pushing section id
-    const updateCourseDetails=await Course.findByIdAndUpdate({courseId},{$push:{courseContent:newSection._id}},{new:true}).populate("courseContent").exec()
+    const updateCourseDetails=await Course.findByIdAndUpdate(courseId,{$push:{courseContent:newSection._id}},{new:true}).populate({path:"courseContent"}).exec()
     //return res
     return res.status(200).json({
         success:true,
@@ -48,7 +48,7 @@ exports.updateSection=async(req,res)=>{
             })
         }
         //data update
-        const updateSectionDetails=await sectionId.findByIdAndUpdate({sectionId},{sectionName},{new:true})
+        const updateSectionDetails=await Section.findByIdAndUpdate(sectionId,{sectionName},{new:true})
         //return res
         return res.status(200).json({
             success:true,
@@ -67,18 +67,26 @@ exports.updateSection=async(req,res)=>{
 exports.deleteSection=async(req,res)=>{
     try {
         //data fetch sirf id
-        const {sectionId}=req.params
+        const {sectionId,courseId}=req.body
         //data validation\
-        if(!sectionId){
+        if(!sectionId || !courseId){
             return res.status(404).json({
                 success:false,
-                message:"unable to find the section id"
+                message:"unable to find the id"
             })
         }
-        //delete
-        deletedSectionDetails=await Section.findByIdAndDelete({sectionId},{new:true})
+        //validate course and section id
+        if(!Section.findById(sectionId) || !Course.findById(courseId) ){
+            return res.status(404).json({
+                success:true,
+                message:"unable to find the course or section u want to delete"
+            })
+        }
         //update course (mandatory or  not) TODO while testing
-        // updatedCourseDetails=await Course.findByIdAndUpdate({courseID},{$pull:{courseContent:sectionId}},{new:true})
+        updatedCourseDetails=await Course.findByIdAndUpdate(courseId,{$pull:{courseContent:sectionId}},{new:true})
+        //delete
+        deletedSectionDetails=await Section.findByIdAndDelete(sectionId,{new:true})
+        
         //return res
         return res.status(200).json({
             success:true,

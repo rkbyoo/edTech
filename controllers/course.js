@@ -95,7 +95,9 @@ exports.getCourseDetails=async(req,res)=>{
         })
     }
     const courseDetails=await Course.findById(courseId).populate({path:"instructor",populate:{path:"additionalDetails"}})
-    .populate("category").populate("ratingAndReview").populate({path:"courseContent",populate:{path:"subSection"}})
+    .populate("category")
+    //.populate("ratingAndReview")
+    .populate({path:"courseContent",populate:{path:"subSection"}})
     if(!courseDetails){
         return res.status(400).json({
             success:false,

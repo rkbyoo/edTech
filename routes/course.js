@@ -45,7 +45,7 @@ router.get("/courseRating",getCourseRating)
 //api endpoint for section and subsection
 router.post("/createSection",auth,isInstructor,createSection)
 router.put("/updateSection",auth,isInstructor,updateSection)
-router.delete("/deleteSection",auth,isInstructor,deleteSection)
+router.delete("/deleteSection/:id",auth,isInstructor,deleteSection)
 
 router.post("createSubSection",auth,isInstructor,createSubsection)
 router.put("/updateSubsection",auth,isInstructor,updateSubSection)

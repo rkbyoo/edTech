@@ -83,9 +83,9 @@ exports.deleteSection=async(req,res)=>{
             })
         }
         //update course (mandatory or  not) TODO while testing
-        updatedCourseDetails=await Course.findByIdAndUpdate(courseId,{$pull:{courseContent:sectionId}},{new:true})
+        const updatedCourseDetails=await Course.findByIdAndUpdate(courseId,{$pull:{courseContent:sectionId}},{new:true})
         //delete
-        deletedSectionDetails=await Section.findByIdAndDelete(sectionId,{new:true})
+        await Section.findByIdAndDelete(sectionId,{new:true})
         
         //return res
         return res.status(200).json({

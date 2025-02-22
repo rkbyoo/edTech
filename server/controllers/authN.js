@@ -124,7 +124,7 @@ exports.signUp = async (req, res) => {
 			accountType,
 			approved,
 			additionalDetails: profileDetails._id,
-			image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
+			image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName}${lastName}`,
 		});
 
 		return res.status(200).json({

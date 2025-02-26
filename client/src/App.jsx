@@ -1,10 +1,14 @@
-
+import { Route,Routes } from 'react-router-dom'
+import Home from './pages/Home'
 function App() {
   return (
-    <div className="flex flex-col items-center max-w-screen h-dvh text-center pt-40">
-      hey
+    <div className='w-screen min-h-screen bg-richblack-900 flex flex-col font-inter'>
+      <Routes>
+        <Route path="/" element={<Home/>}></Route>
+      </Routes>
+      
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
